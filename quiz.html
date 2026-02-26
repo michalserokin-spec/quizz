@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Quiz – Operacje na tekście</title>
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 40px;
+}
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 850px;
+    margin: auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+h1 {
+    text-align: center;
+}
+.question {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f7f9fc;
+}
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover {
+    background: #5a67d8;
+}
+.result {
+    margin-top: 25px;
+    font-weight: bold;
+    font-size: 18px;
+}
+textarea {
+    width: 100%;
+    height: 90px;
+    border-radius: 8px;
+    padding: 10px;
+}
+code {
+    background: #eee;
+    padding: 10px;
+    display: block;
+    border-radius: 8px;
+}
+.progress-bar {
+    height: 20px;
+    background: #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.progress {
+    height: 100%;
+    width: 0%;
+    background: #667eea;
+    transition: 0.5s;
+}
+.correct { background-color: #d4edda !important; }
+.incorrect { background-color: #f8d7da !important; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Quiz – Operacje na tekście</h1>
+
+<div class="progress-bar">
+    <div class="progress" id="progress"></div>
+</div>
+
+<form id="quizForm">
+
+<div class="question" id="q1box">
+<p><b>1. Która funkcja oblicza długość tekstu w Pythonie?</b></p>
+<input type="radio" name="q1" value="size"> size()<br>
+<input type="radio" name="q1" value="length"> length()<br>
+<input type="radio" name="q1" value="len"> len()<br>
+<input type="radio" name="q1" value="count"> count()<br>
+</div>
+
+<div class="question" id="q2box">
+<p><b>2. Która metoda zamienia tekst na małe litery?</b></p>
+<input type="radio" name="q2" value="lower"> lower()<br>
+<input type="radio" name="q2" value="small"> small()<br>
+<input type="radio" name="q2" value="down"> down()<br>
+<input type="radio" name="q2" value="min"> min()<br>
+</div>
+
+<div class="question" id="q3box">
+<p><b>3. Która metoda dzieli tekst na części?</b></p>
+<input type="radio" name="q3" value="join"> join()<br>
+<input type="radio" name="q3" value="divide"> divide()<br>
+<input type="radio" name="q3" value="split"> split()<br>
+<input type="radio" name="q3" value="cut"> cut()<br>
+</div>
+
+<div class="question" id="q4box">
+<p><b>4. Co wyświetli program?</b></p>
+<code>
+tekst = "Programowanie"<br>
+print(len(tekst))<br>
+print(tekst.upper())
+</code>
+<textarea id="q4"></textarea>
+</div>
+
+<div class="question" id="q5box">
+<p><b>5. Co wyświetli program?</b></p>
+<code>
+tekst = "Ala ma kota"<br>
+slowa = tekst.split(" ")<br>
+print(slowa)<br>
+print("-".join(slowa))
+</code>
+<textarea id="q5"></textarea>
+</div>
+
+<button type="button" onclick="checkQuiz()">Sprawdź wynik</button>
+
+<div class="result" id="result"></div>
+
+</form>
+</div>
+
+<script>
+function checkQuiz() {
+    let score = 0;
+    let total = 5;
+
+    // Zamknięte
+    if (document.querySelector('input[name="q1"]:checked')?.value === "len") {
+        score++;
+        q1box.classList.add("correct");
+    } else { q1box.classList.add("incorrect"); }
+
+    if (document.querySelector('input[name="q2"]:checked')?.value === "lower") {
+        score++;
+        q2box.classList.add("correct");
+    } else { q2box.classList.add("incorrect"); }
+
+    if (document.querySelector('input[name="q3"]:checked')?.value === "split") {
+        score++;
+        q3box.classList.add("correct");
+    } else { q3box.classList.add("incorrect"); }
+
+    // Otwarte (proste sprawdzanie słów kluczowych)
+    let q4 = document.getElementById("q4").value.toLowerCase();
+    if (q4.includes("13") && q4.includes("programowanie")) {
+        score++;
+        q4box.classList.add("correct");
+    } else { q4box.classList.add("incorrect"); }
+
+    let q5 = document.getElementById("q5").value.toLowerCase();
+    if (q5.includes("['ala', 'ma', 'kota']") && q5.includes("ala-ma-kota")) {
+        score++;
+        q5box.classList.add("correct");
+    } else { q5box.classList.add("incorrect"); }
+
+    let percent = Math.round((score/total)*100);
+    document.getElementById("progress").style.width = percent + "%";
+
+    let grade;
+    if (percent >= 90) grade = 6;
+    else if (percent >= 75) grade = 5;
+    else if (percent >= 60) grade = 4;
+    else if (percent >= 45) grade = 3;
+    else if (percent >= 30) grade = 2;
+    else grade = 1;
+
+    document.getElementById("result").innerHTML =
+        `Twój wynik: ${score} / ${total} (${percent}%)<br>Ocena: ${grade}`;
+}
+</script>
+
+</body>
+</html>
